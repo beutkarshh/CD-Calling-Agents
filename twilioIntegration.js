@@ -2,7 +2,7 @@
 
 import twilio from 'twilio';
 import dotenv from 'dotenv';
-import { continueConversation, getSeminarDetails } from './geminiEngine.js';
+import { startConversation, continueConversation, getSeminarDetails } from './geminiEngine.js';
 import LanguageEngine from './languageEngine.js';
 import AICallerDatabase from './database.js';
 
@@ -63,10 +63,10 @@ class TwilioCallManager {
       });
 
       // Log to database
-      await this.db.logCall(contact.phone, 'initiated', {
-        callSid: call.sid,
-        direction: 'outbound'
-      });
+      // await this.db.logCall(contact.phone, 'initiated', {
+      //  callSid: call.sid,
+      //  direction: 'outbound'
+      // });
 
       return {
         success: true,
@@ -76,9 +76,9 @@ class TwilioCallManager {
 
     } catch (error) {
       console.error(`❌ Failed to initiate call: ${error.message}`);
-      await this.db.logCall(contact.phone, 'failed', {
-        error: error.message
-      });
+      // await this.db.logCall(contact.phone, 'failed', {
+      //  error: error.message
+      // });
 
       return {
         success: false,
@@ -105,7 +105,7 @@ class TwilioCallManager {
 
       twiml.hangup();
 
-      await this.db.updateCallLog(contact.phone, 'voicemail_left');
+      // await this.db.updateCallLog(contact.phone, 'voicemail_left');
       return twiml.toString();
     }
 
@@ -189,7 +189,7 @@ class TwilioCallManager {
       // Get AI response
       if (!callState.chat) {
         // First conversation - need to initialize
-        const { chat, text, intent } = await this.languageEngine.startConversation(
+        const { chat, text, intent } = await startConversation(
           callState.contact,
           getSeminarDetails()
         );
@@ -230,11 +230,11 @@ class TwilioCallManager {
         twiml.hangup();
 
         // Update database
-        await this.db.updateCallLog(callState.contact.phone, 'completed', {
-          intent: intent.intent,
-          rsvp: intent.rsvp,
-          duration: (new Date() - callState.startTime) / 1000
-        });
+        // await this.db.updateCallLog(callState.contact.phone, 'completed', {
+        //  intent: intent.intent,
+        //  rsvp: intent.rsvp,
+        //  duration: (new Date() - callState.startTime) / 1000
+        // });
 
         // Cleanup
         this.activeCalls.delete(callSid);
@@ -265,9 +265,9 @@ class TwilioCallManager {
       twiml.say('Sorry, I encountered an error. Please try again later. Goodbye.');
       twiml.hangup();
 
-      await this.db.updateCallLog(callState.contact.phone, 'error', {
-        error: error.message
-      });
+      // await this.db.updateCallLog(callState.contact.phone, 'error', {
+      //  error: error.message
+      // });
 
       this.activeCalls.delete(callSid);
 
@@ -285,10 +285,10 @@ class TwilioCallManager {
 
     if (status === 'completed' || status === 'failed' || status === 'no-answer' || status === 'busy') {
       if (callState) {
-        await this.db.updateCallLog(callState.contact.phone, status, {
-          duration,
-          conversationHistory: callState.conversationHistory
-        });
+        // await this.db.updateCallLog(callState.contact.phone, status, {
+        //  duration,
+        //  conversationHistory: callState.conversationHistory
+        // });
 
         this.activeCalls.delete(callSid);
       }

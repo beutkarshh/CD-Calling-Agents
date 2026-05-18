@@ -85,6 +85,7 @@ async function initializeSystems() {
     characterManager = new CharacterManager();
     voiceEngine = new MultilingualVoiceEngine();
     exotelCaller = new ExotelCaller();
+    twilioManager = new TwilioCallManager();
     whatsappManager = new WhatsAppManager();
 
     // Initialize queue processor
@@ -820,7 +821,47 @@ app.post('/webhook/exotel-call-status', (req, res) => {
   }
 });
 
-// API: Start real outbound call to a student
+// ── TWILIO WEBHOOK ENDPOINTS ──────────────────────────────────────────────
+
+app.post('/api/twilio/voice-start', express.urlencoded({ extended: true }), async (req, res) => {
+  console.log('🔗 Twilio call connected:', req.body.CallSid);
+  if (!twilioManager) return res.status(503).send('Twilio not initialized');
+  const contact = { phone: req.body.To || req.body.From, name: 'Student' };
+  const twiml = await twilioManager.generateStartTwiML(req.body.CallSid, contact, req.body.AnsweredBy);
+  res.type('text/xml').send(twiml);
+});
+
+app.post('/api/twilio/voice-continue', express.urlencoded({ extended: true }), async (req, res) => {
+  console.log('👂 Twilio gather input for:', req.body.CallSid);
+  if (!twilioManager) return res.status(503).send('Twilio not initialized');
+  const noInput = req.query.noInput === 'true';
+  const twiml = await twilioManager.generateContinueTwiML(req.body.CallSid, req.body.SpeechResult, noInput);
+  res.type('text/xml').send(twiml);
+});
+
+app.post('/api/twilio/status', express.urlencoded({ extended: true }), async (req, res) => {
+  console.log('📊 Twilio status update:', req.body.CallStatus);
+  if (twilioManager) {
+    await twilioManager.handleStatusUpdate(req.body.CallSid, req.body.CallStatus, req.body.CallDuration);
+  }
+  res.send('OK');
+});
+
+// API: Start real outbound call to a student via Twilio
+app.post('/api/twilio/call', async (req, res) => {
+  const { phone, name } = req.body;
+  if (!twilioManager) return res.status(503).json({ error: 'Twilio caller not initialized' });
+  if (!phone) return res.status(400).json({ error: 'Phone number required' });
+  try {
+    const call = await twilioManager.makeCall({ phone, name: name || 'Student' });
+    res.json(call);
+  } catch (error) {
+    console.error('❌ Failed to start Twilio call:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// API: Start real outbound call to a student (Exotel)
 app.post('/api/exotel/call', async (req, res) => {
   const { phone, name } = req.body;
 
