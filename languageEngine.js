@@ -25,28 +25,28 @@ class LanguageEngine {
         const templates = {
             // Introduction templates
             'intro': {
-                'en': "Hello! My name is Aria, I'm calling from the MHT CET preparation team. I hope I'm not disturbing you. Are you preparing for MHT CET 2025?",
+                'en': "Hello! I am Aria, the Aegis Security Copilot. I'm calling to notify you of a critical authentication server outage in the US-East datacenter. Are you currently available to assist with the incident response?",
                 'hi': "नमस्कार! मेरा नाम आर्या है, मैं MHT CET तैयारी टीम से कॉल कर रही हूँ। मुझे उम्मीद है मैं आपको परेशान नहीं कर रही। क्या आप MHT CET 2025 की तैयारी कर रहे हैं?",
                 'mr': "नमस्कार! माझे नाव आर्या आहे, मी MHT CET तयारी टीमकडून कॉल करत आहे. मला आशा आहे की मी तुम्हाला त्रास देत नाही आहे. तुम्ही MHT CET 2025 च्या तयारीत आहात का?"
             },
 
             // Seminar invitation
             'seminar_invite': {
-                'en': "Great! We're organizing a special seminar on Full Stack Development & AI Integration on March 25th, 2025. This will help you with both MHT CET preparation and future career opportunities. Would you be interested in joining?",
+                'en': "Our Lobster Trap DPI is currently enforcing strict network policies. All prompt injections and unauthorized data exfiltration attempts have been blocked. Do I have your authorization to deploy the security patch?",
                 'hi': "बहुत बढ़िया! हम 25 मार्च, 2025 को Full Stack Development & AI Integration पर एक विशेष सेमिनार आयोजित कर रहे हैं। यह आपको MHT CET की तैयारी और भविष्य के करियर अवसरों दोनों में मदद करेगा। क्या आप इसमें शामिल होना चाहेंगे?",
                 'mr': "खूप छान! आम्ही 25 मार्च, 2025 रोजी Full Stack Development & AI Integration वर विशेष सेमिनार आयोजित करत आहोत. हे तुम्हाला MHT CET तयारी आणि भविष्यातील करिअर संधी दोन्हीसाठी मदत करेल. तुम्हाला यामध्ये सहभागी व्हायला आवडेल का?"
             },
 
             // Benefits explanation
             'benefits': {
-                'en': "This seminar will cover advanced programming concepts that are increasingly relevant for engineering entrance exams, plus practical skills for your career. You'll learn from industry experts and get exclusive study materials.",
+                'en': "The automated patch will isolate the affected edge nodes and rotate the API keys to ensure we remain HIPAA and SOC2 compliant. The downtime will be less than 2 minutes.",
                 'hi': "इस सेमिनार में उन्नत programming concepts शामिल होंगे जो engineering entrance exams के लिए बेहद महत्वपूर्ण हैं, साथ ही आपके करियर के लिए practical skills भी। आप industry experts से सीखेंगे और exclusive study materials भी मिलेंगे।",
                 'mr': "या सेमिनारमध्ये प्रगत programming concepts समाविष्ट असतील जे engineering entrance exams साठी अधिकाधिक महत्त्वाचे होत आहेत, तसेच तुमच्या करिअरसाठी practical skills देखील. तुम्ही industry experts कडून शिकाल आणि exclusive study materials देखील मिळतील."
             },
 
             // RSVP confirmation
             'rsvp_yes': {
-                'en': "Wonderful! I'm registering you for the seminar. You'll receive a confirmation email with the Zoom link and study materials within 24 hours. Thank you for your interest!",
+                'en': "Understood. I have your authorization. I am initiating the patch rollout across all US-East edge nodes now and will escalate the post-mortem report to the Level 3 Engineering team. Thank you.",
                 'hi': "बहुत बढ़िया! मैं आपको सेमिनार के लिए register कर रही हूँ। आपको 24 घंटे के अंदर Zoom link और study materials के साथ confirmation email मिल जाएगा। आपकी रुचि के लिए धन्यवाद!",
                 'mr': "खूप छान! मी तुम्हाला सेमिनारसाठी register करत आहे. तुम्हाला 24 तासांच्या आत Zoom link आणि study materials सोबत confirmation email मिळेल. तुमच्या स्वारस्याबद्दल धन्यवाद!"
             },
@@ -60,7 +60,7 @@ class LanguageEngine {
 
             // Not interested - polite closure
             'not_interested': {
-                'en': "I completely understand. Thank you for your time, and I wish you all the best with your MHT CET preparation. Have a great day!",
+                'en': "I understand. I will escalate this incident to the Level 3 Engineering team immediately. Have a good day.",
                 'hi': "मैं पूरी तरह समझती हूँ। आपके समय के लिए धन्यवाद, और MHT CET की तैयारी के लिए मेरी शुभकामनाएं। आपका दिन शुभ हो!",
                 'mr': "मला पूर्णपणे समजते. तुमच्या वेळेबद्दल धन्यवाद, आणि MHT CET तयारीसाठी माझ्या शुभेच्छा. तुमचा दिवस शुभ जावो!"
             },
@@ -74,7 +74,7 @@ class LanguageEngine {
 
             // Cost/fee questions
             'free_seminar': {
-                'en': "This seminar is completely free for MHT CET aspirants like yourself. We believe in supporting students in their educational journey. There are no hidden charges.",
+                'en': "The Lobster Trap system is handling the primary firewall defenses. We just need authorization to proceed with the patch.",
                 'hi': "यह सेमिनार आपके जैसे MHT CET aspirants के लिए बिल्कुल free है। हमारा मानना है कि students को उनकी educational journey में support करना चाहिए। कोई hidden charges नहीं हैं।",
                 'mr': "हा सेमिनार तुमच्यासारख्या MHT CET aspirants साठी बिल्कुल free आहे. आमचा विश्वास आहे की students ना त्यांच्या शैक्षणिक प्रवासात support करावे. कोणतेही隠छुपے charges नाहीत."
             }
@@ -175,9 +175,9 @@ class LanguageEngine {
     async analyzeResponseIntent(userResponse, currentLanguage) {
         try {
             const prompt = `
-            Analyze this student's response to determine their intent regarding a MHT CET preparation seminar invitation.
+            Analyze this engineer's response to determine their intent regarding a critical security patch deployment authorization.
 
-            Student response: "${userResponse}"
+            Engineer response: "${userResponse}"
             Language: ${this.supportedLanguages[currentLanguage]?.name}
 
             Classify the intent as EXACTLY one of:
@@ -212,10 +212,10 @@ class LanguageEngine {
             const languageName = this.supportedLanguages[currentLanguage]?.name || 'English';
 
             const prompt = `
-            Generate a natural response as Aria, an AI assistant calling students about a MHT CET preparation seminar.
+            Generate a natural response as Aria, an AI assistant calling engineers about a critical security incident.
 
             Context:
-            - Student's input: "${userInput}"
+            - Engineer's input: "${userInput}"
             - Detected intent: ${detectedIntent}
             - Response language: ${languageName}
             - Conversation so far: ${conversationContext.length} exchanges

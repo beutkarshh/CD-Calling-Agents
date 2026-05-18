@@ -156,9 +156,12 @@
 <body>
 
 <nav>
-  <div class="nav-logo">VOICE<span>FORGE</span></div>
-  <span style="color:var(--border)">|</span>
-  <span style="font-size:13px; color:var(--muted);">Client Onboarding</span>
+  <div class="nav-logo">AEGIS<span>/</span>NEXUS AI</div>
+  <div class="nav-links" style="display:flex; gap:20px; margin-left: 40px; margin-right:auto; font-size:12px; font-weight:600; letter-spacing:1px;">
+    <a href="/" style="color:var(--muted); text-decoration:none;">Outbound</a>
+    <a href="/inbound" style="color:var(--muted); text-decoration:none;">Inbound</a>
+    <a href="/admin" style="color:var(--muted); text-decoration:none;">Admin</a>
+  </div>
   <a href="/admin" class="nav-back">← Back to Admin</a>
 </nav>
 
@@ -184,7 +187,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Company Name *</label>
-          <input id="biz-name" placeholder="e.g. Campus Dekho" />
+          <input id="biz-name" placeholder="e.g. Aegis Nexus AI" />
         </div>
         <div class="form-group">
           <label>Website</label>
@@ -194,7 +197,7 @@
       <div class="form-row full">
         <div class="form-group">
           <label>What does your company do? (1-2 lines)</label>
-          <textarea id="biz-desc" placeholder="e.g. We help students with MHT-CET preparation and college admissions across Maharashtra."></textarea>
+          <textarea id="biz-desc" placeholder="e.g. We provide enterprise operations copilot capabilities for automated incident response."></textarea>
         </div>
       </div>
 
@@ -226,7 +229,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Agent Name</label>
-          <input id="agent-name" value="Priya" placeholder="e.g. Priya, Riya, Alex" />
+          <input id="agent-name" value="Aria" placeholder="e.g. Aria, Alex, Sam" />
         </div>
         <div class="form-group">
           <label>Call Goal</label>
@@ -241,7 +244,7 @@
       <div class="form-row full">
         <div class="form-group">
           <label>What should the agent achieve on each call?</label>
-          <textarea id="call-goal" placeholder="e.g. Invite students to our free MHT-CET preparation seminar, answer their doubts, and collect RSVP."></textarea>
+          <textarea id="call-goal" placeholder="e.g. Notify the employee of a security incident and obtain patch authorization."></textarea>
         </div>
       </div>
       <div class="form-group" style="margin-bottom:20px;">
@@ -526,7 +529,7 @@
     return {
       name: document.getElementById('biz-name').value.trim(),
       tagline: document.getElementById('biz-desc').value.trim(),
-      agent_name: document.getElementById('agent-name').value.trim() || 'Priya',
+      agent_name: document.getElementById('agent-name').value.trim() || 'Aria',
       industry: selectedIndustry,
       languages: [...selectedLangs].join(','),
       website: document.getElementById('biz-website').value.trim(),
@@ -569,7 +572,7 @@
   window.addEventListener('load', () => {
     const params = new URLSearchParams(location.search);
     if (params.get('demo') === 'campusdekho') {
-      document.getElementById('biz-name').value = 'Campus Dekho';
+      document.getElementById('biz-name').value = 'Aegis Nexus AI';
       document.getElementById('biz-website').value = 'https://campusdekho.ai';
       document.getElementById('biz-desc').value = "India's leading education guidance platform for MHT-CET preparation and college admissions.";
       document.getElementById('call-goal').value = 'Invite students to free MHT-CET preparation seminars, answer doubts, and collect RSVP.';

@@ -102,7 +102,7 @@ class ExotelCaller {
       const aiResult = await startMHTCETConversation('en');
       callSession.aiSession = aiResult.chat;
 
-      // Generate TTS for Priya's greeting
+      // Generate TTS for Aria's greeting
       const audioPath = await speak(
         aiResult.text,
         process.env.ELEVENLABS_API_KEY,

@@ -100,8 +100,8 @@ class TwilioCallManager {
 
       twiml.say({
         voice: 'Polly.Joanna',
-        language: 'en-IN'
-      }, `Hello, this is Aria calling from ${getSeminarDetails().name}. Please call us back to learn about our upcoming seminar. Thank you!`);
+        language: 'en-US'
+      }, `Hello, this is Aria calling from Aegis Nexus. We are experiencing a critical server incident. Please check your emergency pager. Thank you!`);
 
       twiml.hangup();
 
@@ -125,11 +125,6 @@ class TwilioCallManager {
     // Aria's introduction
     const intro = await this.languageEngine.getTemplate('intro', 'en');
 
-    twiml.say({
-      voice: 'Polly.Joanna',
-      language: 'en-IN'
-    }, intro);
-
     // Gather student response with speech recognition
     const gather = twiml.gather({
       input: 'speech',
@@ -137,14 +132,14 @@ class TwilioCallManager {
       method: 'POST',
       timeout: 5,
       speechTimeout: 'auto',
-      language: 'en-IN',
+      language: 'en-US',
       hints: 'yes, no, interested, not interested, tell me more, when, where'
     });
 
     gather.say({
       voice: 'Polly.Joanna',
-      language: 'en-IN'
-    }, 'I am listening...');
+      language: 'en-US'
+    }, intro);
 
     // If no input, prompt again
     twiml.redirect('/api/twilio/voice-continue?noInput=true');
@@ -213,28 +208,15 @@ class TwilioCallManager {
         timestamp: new Date()
       });
 
-      // Speak AI response
-      twiml.say({
-        voice: 'Polly.Joanna',
-        language: 'en-IN'
-      }, aiResponse);
-
       // Check if conversation should end
       if (intent?.done) {
         // End call
         twiml.say({
           voice: 'Polly.Joanna',
           language: 'en-IN'
-        }, 'Thank you for your time. Have a great day!');
+        }, aiResponse + ' Thank you for your time. Have a great day!');
 
         twiml.hangup();
-
-        // Update database
-        // await this.db.updateCallLog(callState.contact.phone, 'completed', {
-        //  intent: intent.intent,
-        //  rsvp: intent.rsvp,
-        //  duration: (new Date() - callState.startTime) / 1000
-        // });
 
         // Cleanup
         this.activeCalls.delete(callSid);
@@ -252,7 +234,7 @@ class TwilioCallManager {
         gather.say({
           voice: 'Polly.Joanna',
           language: 'en-IN'
-        }, 'I am listening...');
+        }, aiResponse);
 
         twiml.redirect('/api/twilio/voice-continue?noInput=true');
       }

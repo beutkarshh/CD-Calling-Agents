@@ -1,11 +1,11 @@
-# 🎓 Campus Dekho AI Voice Agent
+# 🎓 Aegis Nexus AI Voice Agent
 
-An advanced AI-powered voice calling system for MHT-CET outreach and student guidance. Built for **Campus Dekho** to reach thousands of Maharashtra students with personalized educational guidance.
+An advanced AI-powered voice calling system for Enterprise Security Incident Response. Built for **Aegis Nexus AI** to reach engineers with personalized alerts and patch authorizations.
 
 ## 🚀 Features
 
 ### 🤖 AI-Powered Conversations
-- **Priya** - Campus Dekho's multilingual AI assistant
+- **Aria** - Aegis Nexus AI's multilingual AI assistant
 - Powered by Google Gemini 2.0 Flash for intelligent conversations
 - Natural language processing in English, Hindi, and Marathi
 
@@ -20,7 +20,7 @@ An advanced AI-powered voice calling system for MHT-CET outreach and student gui
 - Automated bulk calling campaigns
 - Real-time call monitoring and analytics
 
-### 🎯 Campus Dekho Services
+### 🎯 Aegis Nexus Services
 - **MHT-CET Preparation Events**: 24 locations with specific schedules
 - **Campus Tours**: University visits in Pune with parents
 - **Admission Counseling**: Professional guidance for engineering & medical colleges
@@ -92,7 +92,7 @@ Follow the detailed [Calling Setup Guide](CALLING_SETUP_GUIDE.md) to integrate w
 ## 🎯 How It Works
 
 ### Student Experience
-1. **📞 Receives Call**: From Campus Dekho via Priya
+1. **📞 Receives Call**: From Aegis Nexus AI via Aria
 2. **🗣️ Natural Conversation**: In English, Hindi, or Marathi
 3. **📍 Location Query**: "Which city are you from?"
 4. **🎯 Specific Guidance**: Exact venue, date, and time for their location
@@ -155,11 +155,11 @@ node dashboard-server.js
 
 ## 📝 License
 
-This project is developed for Campus Dekho's educational outreach initiatives.
+This project is developed for Aegis Nexus AI's enterprise security incident response initiatives.
 
 ## 🤝 Contributing
 
-This is a private project for Campus Dekho. For questions or support, contact the development team.
+This is a private project for Aegis Nexus AI. For questions or support, contact the development team.
 
 ---
 

@@ -117,7 +117,7 @@ async function migrateContactsToDatabase() {
     // Use default test contacts
     contacts = [
       { id: 1, phone: '+919876543210', name: 'Rahul Sharma', status: 'pending', rsvp: false, notes: '', calledAt: null },
-      { id: 2, phone: '+919823456789', name: 'Priya Patel', status: 'pending', rsvp: false, notes: '', calledAt: null },
+      { id: 2, phone: '+919823456789', name: 'John Doe', status: 'pending', rsvp: false, notes: '', calledAt: null },
       { id: 3, phone: '+919745678901', name: 'Arjun Mehta', status: 'pending', rsvp: false, notes: '', calledAt: null },
       { id: 4, phone: '+919834567890', name: 'Sneha Gupta', status: 'pending', rsvp: false, notes: '', calledAt: null },
       { id: 5, phone: '+919812345678', name: 'Kiran Rao', status: 'pending', rsvp: false, notes: '', calledAt: null },
@@ -473,7 +473,7 @@ app.post('/api/outbound/start', async (req, res) => {
     });
 
     const audioPath = await generateAudio(text, language || preferredLanguage);
-    res.json({ sessionId, text, intent, audioPath, language: language || preferredLanguage, businessName: activeBiz?.name || 'Campus Dekho' });
+    res.json({ sessionId, text, intent, audioPath, language: language || preferredLanguage, businessName: activeBiz?.name || 'Aegis Nexus AI' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -1141,7 +1141,7 @@ app.get('/api/admin/stats', (req, res) => {
 
 // ── INBOUND CALL SYSTEM ───────────────────────────────────────────────────
 
-app.get('/inbound-dashboard', (req, res) => {
+app.get('/inbound', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'inbound-dashboard.html'));
 });
 

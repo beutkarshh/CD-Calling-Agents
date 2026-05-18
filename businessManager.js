@@ -17,7 +17,7 @@ export class BusinessManager {
     this.db = new Database(DB_PATH);
     this.db.pragma('journal_mode = WAL');
     this._initTables();
-    this._seedCampusDekho();
+    this._seedAegisNexus();
     console.log('🏢 BusinessManager initialized');
   }
 
@@ -33,7 +33,7 @@ export class BusinessManager {
       CREATE TABLE IF NOT EXISTS businesses (
         id          TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         name        TEXT NOT NULL,
-        agent_name  TEXT DEFAULT 'Priya',
+        agent_name  TEXT DEFAULT 'Aria',
         industry    TEXT DEFAULT 'education',
         description TEXT,
         call_goal   TEXT,
@@ -81,7 +81,7 @@ export class BusinessManager {
     `);
   }
 
-  _seedCampusDekho() {
+  _seedAegisNexus() {
     const existing = this.db.prepare('SELECT COUNT(*) as n FROM businesses').get();
     if (existing.n > 0) return;
 
@@ -91,15 +91,15 @@ export class BusinessManager {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `).run(
       bizId,
-      'Campus Dekho',
-      'Priya',
-      'Education Counseling',
-      "Campus Dekho (campusdekho.ai) is India's leading education guidance platform. We help students navigate MHT-CET preparation, college admissions, and campus visits across Maharashtra.",
-      'Invite students to free MHT-CET preparation seminars, answer their doubts, and collect RSVP. Also promote campus tours and professional admission counseling.',
+      'Aegis Nexus AI',
+      'Aria',
+      'Cybersecurity Operations',
+      "Aegis Nexus AI is the enterprise operations copilot for incident response and threat mitigation.",
+      'Coordinate with employees regarding the ongoing US-East server outage and get authorization to deploy automated patches.',
       '["outbound_lead","inbound_support"]',
       'en',
       '["en","hi","mr"]',
-      'https://campusdekho.ai'
+      'https://nexus.local'
     );
 
     const insertKb = this.db.prepare(`
@@ -108,23 +108,11 @@ export class BusinessManager {
     `);
 
     const entries = [
-      ['script', 'Opening Greeting', "Hi! I'm Priya from Campus Dekho. I'm calling to help you with MHT-CET preparation and invite you to our free seminar. Are you currently preparing for MHT-CET?", 'greeting,opener', 10],
-      ['faq', 'What is Campus Dekho?', "Campus Dekho (campusdekho.ai) is India's leading education guidance platform helping students with MHT-CET preparation, college admissions, campus tours, and professional counseling.", 'company,about', 9],
-      ['faq', 'MHT-CET Events 2026', 'Free MHT-CET preparation seminars across 24 Maharashtra venues (April 19 - May 3, 2026). Cities: Kolhapur, Sangli, Satara, Pune, Aurangabad, Ahmednagar, Nashik. Both online and offline. Registration link: https://campusdekho.ai/mht-cet-registration', 'event,seminar,venue', 9],
-      ['faq', 'MHT-CET 2026 Exam Pattern', 'PCM: 150 questions, 200 marks, 180 min. PCB: 200 questions, 200 marks, 180 min. No negative marking. Computer-based. 2 attempts per group — best score counts. Difficulty at par with JEE Main/NEET.', 'exam,pattern,mhtcet', 8],
-      ['faq', 'MHT-CET 2026 Registration', 'Registration closed ~Feb 20, 2026. Exam dates to be announced on mahacet.org. Fee: Rs 1300 (General), Rs 1000 (Reserved). Admit cards TBA.', 'registration,dates,fee', 8],
-      ['faq', 'Top Engineering Colleges', 'COEP Pune: 99.9+ percentile. VJTI Mumbai: 99.8+. MIT-WPU/SIT Pune: 95-97. PICT/VIT Pune: 92-95. Choose college based on your target percentile.', 'colleges,percentile,engineering', 7],
-      ['event', 'Kolhapur Events', 'Kolhapur: Apr 19 (Sun) 4-6:30 PM. Bidri: Apr 20 (Mon) 4-6:30 PM. Gadhinglaj: Apr 20 (Mon) 10 AM-12:30 PM. Ichalkaranji: Apr 21 (Tue) 4-6:30 PM. Warna: Apr 21 (Tue) 10 AM-12:30 PM.', 'kolhapur,venue,schedule', 8],
-      ['event', 'Sangli/Satara Events', 'Sangli: Apr 22 (Wed) 10 AM. Tasgoan: Apr 23 (Thu) 10 AM. Karad: Apr 26 (Sun) 10 AM. Satara: Apr 26 (Sun) 4 PM & Apr 27 (Mon) 10 AM. Wai: Apr 27 (Mon) 4 PM.', 'sangli,satara,venue,schedule', 8],
-      ['event', 'Pune Events', 'Indapur: Apr 28 (Tue) 10 AM. Baramati: Apr 28 (Tue) 4 PM & Apr 29 (Wed) 4 PM. Alandi: Apr 30 (Thu) 4 PM.', 'pune,venue,schedule', 8],
-      ['event', 'Other City Events', 'Aurangabad: May 1 (Sun) 4-6:30 PM. Ahmednagar: May 2 (Sat) 4-6:30 PM. Kopargaon: May 3 (Fri) 10 AM-12:30 PM. Nashik: May 3 (Fri) 4-7 PM.', 'nashik,aurangabad,venue,schedule', 8],
-      ['product', 'Campus Tour Program', 'University campus visits in Pune with parents welcome. Minimal fees. Hands-on experience of college facilities and campus life. Helps students make informed college choices.', 'campus,tour,visit', 7],
-      ['product', 'Admission Counseling', 'Professional counseling for Engineering and Medical college admissions. Personalized guidance based on MHT-CET scores. College selection and application assistance.', 'counseling,admission,guidance', 7],
-      ['product', 'Basic Counseling Package', 'Rs 999. College shortlisting, application guidance, 2 counseling sessions. Best for self-directed students who need direction.', 'package,counseling,basic', 6],
-      ['product', 'Premium Counseling Package', 'Rs 2999. Everything in Basic + CAP round support, document verification, 5 sessions. Most popular choice.', 'package,counseling,premium', 6],
-      ['objection', 'Not interested / busy', 'Totally understand! Our seminar is just 2.5 hours and covers exam pattern, high-yield topics, and college selection. Would a different time work better?', 'objection,busy', 5],
-      ['objection', 'Already have coaching', 'Great that you have coaching! Our seminar complements it perfectly — we focus on the admission strategy side: college choices, percentile targets, and campus visits that coaching centers don\'t cover.', 'objection,coaching', 5],
-      ['objection', 'Online/offline preference', 'We have both options! The online session is just as interactive, or you can join us in person at the nearest venue. Which would you prefer?', 'objection,online,offline', 5],
+      ['script', 'Opening Greeting', "Hello! I am Aria, the Aegis Security Copilot. I'm calling to notify you of a critical authentication server outage in the US-East datacenter. Are you currently available to assist with the incident response?", 'greeting,opener', 10],
+      ['faq', 'What is Aegis Nexus?', "Aegis Nexus AI is the enterprise operations platform that uses Lobster Trap DPI and Gemini 2.5 Flash to automatically detect and mitigate infrastructure threats.", 'company,about', 9],
+      ['faq', 'Incident Details', 'The US-East-1 datacenter is currently experiencing a critical authentication outage due to a detected policy breach. We need authorization to isolate the affected servers and deploy the automated security patch.', 'incident,outage,server', 9],
+      ['faq', 'Security Status', 'Our Lobster Trap DPI is currently enforcing strict network policies. All prompt injections and unauthorized data exfiltration attempts have been blocked. We remain HIPAA and SOC2 compliant.', 'security,lobster,guardrails', 8],
+      ['faq', 'Next Steps', 'Once you authorize the patch deployment, I will initiate the rollout across all US-East edge nodes and then escalate the post-mortem report to the Level 3 Engineering team.', 'patch,deployment,escalation', 8]
     ];
 
     const insertMany = this.db.transaction((rows) => {
@@ -134,7 +122,7 @@ export class BusinessManager {
     });
     insertMany(entries);
 
-    console.log(`✅ Campus Dekho seeded as default business (${entries.length} KB entries)`);
+    console.log(`✅ Aegis Nexus seeded as default business (${entries.length} KB entries)`);
   }
 
   // ── CRUD ──────────────────────────────────────────────────────────────────
@@ -159,7 +147,7 @@ export class BusinessManager {
     `).run(
       bizId,
       data.name,
-      data.agent_name || 'Priya',
+      data.agent_name || 'Aria',
       data.industry || 'general',
       data.tagline || data.description || '',
       JSON.stringify((data.languages || 'en').split(',').map(l => l.trim())),

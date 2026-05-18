@@ -37,7 +37,7 @@ async function runSimulation() {
     console.log('⚠️  No contacts.csv found — running with demo contacts\n');
     contacts = [
       { id: 1, phone: '+919876543210', name: 'Rahul Sharma', status: 'pending', rsvp: false, notes: '', calledAt: null },
-      { id: 2, phone: '+919823456789', name: 'Priya Patel', status: 'pending', rsvp: false, notes: '', calledAt: null },
+      { id: 2, phone: '+919823456789', name: 'Alice Smith', status: 'pending', rsvp: false, notes: '', calledAt: null },
       { id: 3, phone: '+919812345678', name: 'Student 3', status: 'pending', rsvp: false, notes: '', calledAt: null },
     ];
   }

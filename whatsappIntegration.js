@@ -1,4 +1,4 @@
-// whatsappIntegration.js — WhatsApp automation with Twilio for MHT-CET outreach
+// whatsappIntegration.js — WhatsApp automation with Twilio for Aegis Nexus alerts
 
 import twilio from 'twilio';
 import dotenv from 'dotenv';
@@ -12,7 +12,7 @@ class WhatsAppManager {
     this.accountSid = process.env.TWILIO_ACCOUNT_SID;
     this.authToken = process.env.TWILIO_AUTH_TOKEN;
     this.whatsappNumber = process.env.TWILIO_WHATSAPP_NUMBER;
-    this.registrationLink = process.env.WHATSAPP_REGISTRATION_LINK || 'https://campusdekho.ai/register';
+    this.registrationLink = process.env.WHATSAPP_REGISTRATION_LINK || 'https://aegisnexus.ai/incident-dashboard';
 
     if (this.accountSid && this.authToken) {
       this.client = twilio(this.accountSid, this.authToken);
@@ -90,7 +90,7 @@ class WhatsAppManager {
   /**
    * Handle incoming WhatsApp message
    */
-  async handleIncomingMessage(from, message, senderName = 'Student') {
+  async handleIncomingMessage(from, message, senderName = 'Engineer') {
     try {
       console.log(`📩 WhatsApp from ${from}: ${message}`);
 
@@ -147,7 +147,7 @@ class WhatsAppManager {
         // Ensure contact exists
         let contact = await this.db.getContactByPhone(plainPhone);
         if (!contact) {
-          await this.db.addContact(plainPhone, senderName || 'WhatsApp User');
+          await this.db.addContact(plainPhone, senderName || 'WhatsApp Engineer');
         }
 
         await this.db.logCall(plainPhone, 'whatsapp_conversation', {
@@ -178,10 +178,9 @@ class WhatsAppManager {
     } catch (error) {
       console.error(`❌ Error handling WhatsApp message: ${error.message}`);
 
-      // Send error message to user
       await this.sendMessage(
         from,
-        "Sorry, I encountered an error. Please try again or contact support@campusdekho.ai"
+        "Sorry, I encountered an error. Please try again or contact support@aegisnexus.ai"
       );
 
       return {
@@ -247,21 +246,19 @@ class WhatsAppManager {
   /**
    * Send welcome message to new user
    */
-  async sendWelcomeMessage(to, name = 'Student') {
-    const welcomeMessage = `🎓 *Namaste ${name}!*
+  async sendWelcomeMessage(to, name = 'Engineer') {
+    const welcomeMessage = `🚨 *Aegis Nexus Alert System*
 
-I'm Priya from Campus Dekho, your AI assistant for MHT-CET 2026 preparation!
+I'm Aria from Aegis Nexus AI, your autonomous security copilot.
 
-🎯 *We're organizing exclusive events across Maharashtra:*
-✅ MHT-CET preparation workshops
-✅ Campus tours of top Pune universities
-✅ Free counseling for engineering & medical admissions
+🛡️ *Monitoring active systems for:*
+✅ Unauthorized Access Attempts
+✅ Server Outages (US-East, EU-West)
+✅ Lobster Trap DPI Violations
 
-📍 *24 venues* across Kolhapur, Sangli, Satara, Pune & more!
+📍 *Global Nodes Monitored:* 24 Data Centers
 
-💬 *Reply with your city name* to get venue details near you.
-
-Example: "Pune" or "Kolhapur"`;
+💬 *Reply with your node location* (e.g., US-East, EU-West) to get status details.`;
 
     return await this.sendMessage(to, welcomeMessage);
   }

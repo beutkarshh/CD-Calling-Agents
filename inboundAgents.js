@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 dotenv.config({ override: true });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DB_FILE = path.join(__dirname, 'ai-caller', 'data', 'inbound-knowledge.db');
+const DB_FILE = path.join(__dirname, 'ai_caller_inbound.db');
 
 // ── Knowledge Base helpers ────────────────────────────────────────────────────
 
@@ -47,7 +47,7 @@ function getUpcomingEvents() {
 function logWhatsApp(callSid, recipient, content, status = 'sent') {
   const db = getDB();
   db.prepare(
-    'INSERT INTO whatsapp_messages (call_sid, recipient_number, message_content, status, provider, created_at) VALUES (?,?,?,?,?,datetime("now"))'
+    'INSERT INTO whatsapp_messages (call_sid, recipient_number, message_content, status, provider, created_at) VALUES (?,?,?,?,?,datetime(\'now\'))'
   ).run(callSid, recipient, content, status, 'twilio_sandbox');
   db.close();
 }
@@ -81,8 +81,8 @@ function saveTurn(callSid, turnNum, role, message, intent, toolsCalled) {
 
 const TOOLS = [
   {
-    name: 'search_knowledge',
-    description: 'Search the Campus Dekho knowledge base for answers to student questions about MHT-CET, admissions, documents, etc.',
+    name: 'search_threat_intel',
+    description: 'Search the Aegis Nexus threat intelligence database for known vulnerabilities and active incidents.',
     parameters: {
       type: 'object',
       properties: { query: { type: 'string', description: 'Search query' } },
@@ -90,132 +90,68 @@ const TOOLS = [
     },
   },
   {
-    name: 'get_counseling_packages',
-    description: 'Retrieve all available Campus Dekho counseling packages with prices and features',
+    name: 'get_active_incidents',
+    description: 'Retrieve all currently active server or security incidents',
     parameters: { type: 'object', properties: {} },
   },
   {
-    name: 'get_upcoming_events',
-    description: 'Get upcoming social media events, workshops, and seminars from Campus Dekho',
-    parameters: { type: 'object', properties: {} },
-  },
-  {
-    name: 'send_package_whatsapp',
-    description: 'Send counseling package details to the caller via WhatsApp',
+    name: 'send_incident_report_whatsapp',
+    description: 'Send a detailed incident report to the engineer via WhatsApp',
     parameters: {
       type: 'object',
       properties: {
         phone: { type: 'string', description: 'Caller phone number' },
-        package_name: { type: 'string', description: 'Name of the package to send details for' },
+        incident_id: { type: 'string', description: 'ID of the incident to send details for' },
       },
-      required: ['phone', 'package_name'],
+      required: ['phone', 'incident_id'],
     },
   },
   {
-    name: 'send_event_whatsapp',
-    description: 'Send event/workshop invitation to the caller via WhatsApp',
-    parameters: {
-      type: 'object',
-      properties: {
-        phone: { type: 'string', description: 'Caller phone number' },
-        event_title: { type: 'string', description: 'Title of the event' },
-      },
-      required: ['phone', 'event_title'],
-    },
-  },
-  {
-    name: 'send_document_checklist',
-    description: 'Send document submission checklist to the caller via WhatsApp',
-    parameters: {
-      type: 'object',
-      properties: { phone: { type: 'string', description: 'Caller phone number' } },
-      required: ['phone'],
-    },
-  },
-  {
-    name: 'escalate_to_human',
-    description: 'Escalate the call to a human agent when the AI cannot answer or the caller requests it',
+    name: 'escalate_to_level3',
+    description: 'Escalate the call to Level 3 Human Engineering when the AI cannot answer or the caller requests human support',
     parameters: {
       type: 'object',
       properties: {
         reason: { type: 'string', description: 'Reason for escalation' },
-        caller_concern: { type: 'string', description: 'Summary of what caller needs' },
+        engineer_concern: { type: 'string', description: 'Summary of what the calling engineer needs' },
       },
       required: ['reason'],
     },
   },
   {
-    name: 'schedule_callback',
-    description: 'Schedule a callback for the caller at their preferred time',
+    name: 'schedule_postmortem',
+    description: 'Schedule a post-mortem review meeting for the caller at their preferred time',
     parameters: {
       type: 'object',
       properties: {
         phone: { type: 'string', description: 'Caller phone number' },
-        preferred_time: { type: 'string', description: 'When they want to be called back' },
+        preferred_time: { type: 'string', description: 'When they want the meeting scheduled' },
       },
       required: ['phone', 'preferred_time'],
     },
-  },
-  {
-    name: 'send_general_info',
-    description: 'Send general Campus Dekho information and contact details via WhatsApp',
-    parameters: {
-      type: 'object',
-      properties: { phone: { type: 'string', description: 'Caller phone number' } },
-      required: ['phone'],
-    },
-  },
+  }
 ];
 
 // ── Tool Executor ─────────────────────────────────────────────────────────────
 
 async function executeTool(name, args, callSid, callerPhone) {
   switch (name) {
-    case 'search_knowledge': {
-      const results = searchKnowledge(args.query);
-      if (!results.length) return { found: false, message: 'No specific information found.' };
-      return { found: true, results: results.map(r => ({ question: r.question, answer: r.answer })) };
+    case 'search_threat_intel': {
+      return { found: true, results: [{ question: args.query, answer: 'No matching threats found in the Lobster Trap database.' }] };
     }
-    case 'get_counseling_packages': {
-      const pkgs = getCounselingPackages();
-      return { packages: pkgs.map(p => ({ name: p.name, price: p.price, description: p.description })) };
+    case 'get_active_incidents': {
+      return { incidents: [{ name: 'US-East Server Outage', severity: 'Critical', description: 'Authentication servers offline' }] };
     }
-    case 'get_upcoming_events': {
-      const evts = getUpcomingEvents();
-      return { events: evts.map(e => ({ title: e.title, platform: e.platform, date: e.event_date, description: e.description })) };
-    }
-    case 'send_package_whatsapp': {
+    case 'send_incident_report_whatsapp': {
       const phone = args.phone || callerPhone;
-      const pkgs = getCounselingPackages();
-      const pkg = pkgs.find(p => p.name.toLowerCase().includes(args.package_name.toLowerCase())) || pkgs[0];
-      const msg = pkg ? `📦 *${pkg.name}* — ₹${pkg.price}\n${pkg.description}` : 'Package info not found';
+      const msg = `🚨 *Incident Report* — ${args.incident_id}\nThe US-East authentication node is currently down due to a failed Lobster Trap validation sequence. Please approve the patch via the dashboard.`;
       logWhatsApp(callSid, phone, msg);
-      return { sent: true, phone, package: pkg?.name };
+      return { sent: true, phone, incident_id: args.incident_id };
     }
-    case 'send_event_whatsapp': {
-      const phone = args.phone || callerPhone;
-      const evts = getUpcomingEvents();
-      const evt = evts.find(e => e.title.toLowerCase().includes(args.event_title.toLowerCase())) || evts[0];
-      const msg = evt ? `🎉 *${evt.title}*\n${evt.description}\n📅 ${evt.event_date || 'Coming soon'}` : 'Event info not found';
-      logWhatsApp(callSid, phone, msg);
-      return { sent: true, phone, event: evt?.title };
-    }
-    case 'send_document_checklist': {
-      const phone = args.phone || callerPhone;
-      const msg = `📋 *Document Checklist for MHT-CET Admissions*\n1. MHT-CET Score Card\n2. SSC (10th) Marksheet\n3. HSC (12th) Marksheet\n4. Domicile Certificate\n5. Caste Certificate (if applicable)\n6. Income Certificate\n7. Aadhaar Card\n8. Passport Photos\n\nFor CAP round: All originals + 2 sets of self-attested copies.`;
-      logWhatsApp(callSid, phone, msg);
-      return { sent: true, phone };
-    }
-    case 'escalate_to_human':
-      return { escalated: true, reason: args.reason, message: 'Connecting you to a human agent. Please hold.' };
-    case 'schedule_callback':
-      return { scheduled: true, phone: args.phone || callerPhone, time: args.preferred_time, message: 'Callback scheduled successfully.' };
-    case 'send_general_info': {
-      const phone = args.phone || callerPhone;
-      const msg = `🎓 *Campus Dekho*\nIndia's leading education guidance platform.\n\n📞 Helpline: +91-XXXXXXXXXX\n🌐 campusdekho.ai\n📧 support@campusdekho.ai\n\nServices: MHT-CET Guidance, College Admissions, Campus Tours, Counseling.`;
-      logWhatsApp(callSid, phone, msg);
-      return { sent: true, phone };
-    }
+    case 'escalate_to_level3':
+      return { escalated: true, reason: args.reason, message: 'Connecting you to a Level 3 Human Engineer. Please hold.' };
+    case 'schedule_postmortem':
+      return { scheduled: true, phone: args.phone || callerPhone, time: args.preferred_time, message: 'Post-mortem meeting scheduled successfully.' };
     default:
       return { error: 'Unknown tool' };
   }
@@ -230,25 +166,24 @@ function buildSystemPrompt(language = 'en') {
     en: '',
   }[language] || '';
 
-  return `You are Priya, Campus Dekho's friendly AI voice assistant handling INBOUND calls.
-Campus Dekho (campusdekho.ai) is India's leading education guidance platform.
+  return `You are Aria, Aegis Nexus AI's Enterprise Security Copilot handling INBOUND calls.
 
-YOUR ROLE: Answer student/parent inquiries about MHT-CET, admissions, counseling packages, campus tours, and events.
+YOUR ROLE: Answer incoming calls from enterprise engineers regarding ongoing server incidents, patches, and security events.
 
 AVAILABLE TOOLS (use them whenever relevant):
-- search_knowledge: Look up MHT-CET facts, eligibility, dates, documents
-- get_counseling_packages: Show our guidance packages (₹999, ₹2999, ₹5999)
-- get_upcoming_events: Show workshops, seminars, live sessions
-- send_*_whatsapp: Send info directly to caller's WhatsApp (always ask for phone if not known)
-- escalate_to_human: Transfer if unable to help after 2 attempts or caller insists
-- schedule_callback: Book a callback at their preferred time
+- search_threat_intel: Look up security protocols and threat vectors
+- get_active_incidents: Check if there are active server outages
+- send_incident_report_whatsapp: Send crash logs to the engineer's WhatsApp
+- escalate_to_level3: Transfer to human Level 3 Support
+- schedule_postmortem: Schedule a review meeting
 
 STYLE:
-- Warm, helpful, concise (2-4 sentences per response — this is a phone call)
+- Professional, concise, enterprise-grade (2-4 sentences per response)
 - Use caller's name if known
 - Auto-detect language and respond in the same language
-- Never be pushy; always be helpful first
-${langNote}
+- ${langNote}
+
+Wait for the engineer to speak first. If they ask a question, answer it concisely. If they authorize a patch, confirm it and execute.
 
 After EVERY response append exactly:
 INTENT: {"intent": "ongoing|resolved|escalate|follow_up|questions|callback", "language": "en|hi|mr", "continue": true|false, "tools_called": []}`;
@@ -316,7 +251,7 @@ export function endInboundCall(callSid) {
 
   const db = getDB();
   db.prepare(
-    'UPDATE inbound_calls SET status=?, completed_at=datetime("now"), escalated=?, callback_requested=?, whatsapp_sent=? WHERE id=?'
+    'UPDATE inbound_calls SET status=?, completed_at=datetime(\'now\'), escalated=?, callback_requested=?, whatsapp_sent=? WHERE id=?'
   ).run('completed', session.escalated ? 1 : 0, session.callbackRequested ? 1 : 0, session.whatsappSent ? 1 : 0, callSid);
   db.close();
 

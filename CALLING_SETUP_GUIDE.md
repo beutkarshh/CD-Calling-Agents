@@ -1,11 +1,11 @@
-# 📞 Real Calling Integration Guide - Campus Dekho
+# 📞 Real Calling Integration Guide - Aegis Nexus AI
 
-This guide helps you connect your Campus Dekho AI system to **Exotel** for real outbound calls to students.
+This guide helps you connect your Aegis Nexus AI system to **Exotel** for real outbound calls to engineers.
 
 ## 🎯 What You'll Get
 
 ✅ **Real Phone Calls**: Make actual calls to students using Exotel cloud telephony
-✅ **AI-Powered Conversations**: Priya handles the entire conversation automatically
+✅ **AI-Powered Conversations**: Aria handles the entire conversation automatically
 ✅ **Location-Based Recommendations**: Students get specific venue details for their city
 ✅ **Bulk Calling**: Process thousands of contacts automatically
 ✅ **Cost-Effective**: ₹1.2-1.8 per minute with Indian provider
@@ -86,7 +86,7 @@ Ensure your `contacts.csv` has proper format:
 ```csv
 name,phone,city
 Rahul Sharma,+919876543210,Pune
-Priya Patil,+919876543211,Kolhapur
+Alice Smith,+919876543211,Kolhapur
 Amit Kumar,+919876543212,Nashik
 ```
 
@@ -102,7 +102,7 @@ curl -X POST http://localhost:3001/api/exotel/bulk-call \
 ## 🎯 How the Call Flow Works
 
 1. **🔍 System dials student number**
-2. **👋 Priya introduces**: "Hi! I'm Priya from Campus Dekho..."
+2. **👋 Aria introduces**: "Hi! I'm Aria from Aegis Nexus AI..."
 3. **📍 Asks location**: "Which city are you from?"
 4. **🎯 Provides specific details**: "Great! Pune has events on April 28th..."
 5. **📚 Discusses MHT-CET preparation**
@@ -136,7 +136,7 @@ curl http://localhost:3001/api/automation/status
 - **Monitor costs** – set daily limits in Exotel dashboard
 - **Follow DND regulations** – respect Do Not Disturb lists
 - **Time your calls** – avoid early morning/late evening
-- **Review scripts** – ensure Priya's responses are appropriate
+- **Review scripts** – ensure Aria's responses are appropriate
 
 ### ⚡ Optimization
 - **Batch processing**: 50-100 calls per batch with delays
@@ -164,13 +164,13 @@ curl http://localhost:3001/api/automation/status
 
 ### Need Help?
 - **Exotel Support**: [support@exotel.com](mailto:support@exotel.com)
-- **Campus Dekho Tech**: Check server logs for detailed error messages
+- **Aegis Nexus Tech**: Check server logs for detailed error messages
 
 ---
 
 ## 🎉 You're Ready!
 
-Your Campus Dekho AI calling system is now ready to reach thousands of students across Maharashtra with personalized MHT-CET guidance!
+Your Aegis Nexus AI calling system is now ready to reach engineers with personalized incident response!
 
 **Next Steps:**
 1. Upload your student contact list

@@ -40,7 +40,7 @@ function getModel(maxTokens = 400) {
 
 export function buildSystemPrompt(business, callType = 'outbound_lead', knowledgeEntries = []) {
   const config = CALL_TYPE_CONFIG[callType] || CALL_TYPE_CONFIG.outbound_lead;
-  const agentName = business.agent_name || 'Priya';
+  const agentName = business.agent_name || 'Aria';
   const langs = (business.languages || 'en').split(',').map(l => l.trim());
   const langNames = { en: 'English', hi: 'Hindi', mr: 'Marathi' };
   const langList = langs.map(l => langNames[l] || l).join(', ');

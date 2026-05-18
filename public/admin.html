@@ -208,12 +208,16 @@
   <div class="topnav-brand">
     <div class="logo-dot">⚡</div>
     <div>
-      <h1>AI Calling Platform</h1>
-      <span>Multi-Client Admin Console</span>
+      <h1>Aegis Nexus AI</h1>
+      <span>Enterprise Admin Console</span>
     </div>
   </div>
+  <div class="nav-links" style="display:flex; gap:20px; margin-left: 40px; margin-right:auto; font-size:12px; font-weight:600; letter-spacing:1px;">
+    <a href="/" style="color:var(--muted); text-decoration:none;">Outbound</a>
+    <a href="/inbound" style="color:var(--muted); text-decoration:none;">Inbound</a>
+    <a href="/admin" style="color:var(--accent); text-decoration:none;">Admin</a>
+  </div>
   <div class="topnav-actions">
-    <button class="btn btn-ghost btn-sm" onclick="location.href='/'">← Call Console</button>
     <button class="btn btn-ghost btn-sm" onclick="refreshAll()">⟳ Refresh</button>
     <button class="btn btn-primary btn-sm" onclick="location.href='/onboard'">+ Onboard Client</button>
   </div>
@@ -301,21 +305,21 @@
 
       <!-- System Status -->
       <div class="panel">
-        <div class="panel-title">System Status</div>
+        <div class="panel-title">Security & System Status</div>
         <div class="system-item">
-          <span class="system-key">Gemini AI</span>
+          <span class="system-key">Gemini 2.5 Flash</span>
           <span class="system-val dot-on">● Online</span>
         </div>
         <div class="system-item">
-          <span class="system-key">ElevenLabs TTS</span>
-          <span class="system-val dot-on">● Online</span>
+          <span class="system-key">Lobster Trap DPI</span>
+          <span class="system-val dot-on" style="color:var(--accent);">● Enforcing</span>
         </div>
         <div class="system-item">
-          <span class="system-key">Exotel Calling</span>
+          <span class="system-key">Twilio Outbound</span>
           <span class="system-val dot-on">● Active</span>
         </div>
         <div class="system-item">
-          <span class="system-key">WhatsApp</span>
+          <span class="system-key">Access Control</span>
           <span class="system-val dot-on">● Sandbox</span>
         </div>
         <div class="system-item">
@@ -323,8 +327,8 @@
           <span class="system-val">EN · HI · MR</span>
         </div>
         <div class="system-item">
-          <span class="system-key">DB Backend</span>
-          <span class="system-val">SQLite</span>
+          <span class="system-key">Audit Backend</span>
+          <span class="system-val">SQLite Ledger</span>
         </div>
       </div>
 
@@ -369,7 +373,7 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div class="form-group">
           <label>Agent Name</label>
-          <input id="qb-agent" placeholder="e.g. Priya">
+          <input id="qb-agent" placeholder="e.g. Aria">
         </div>
         <div class="form-group">
           <label>Industry</label>
@@ -542,7 +546,7 @@ function renderClients(businesses) {
         <div class="client-avatar">${(b.name || '?')[0].toUpperCase()}</div>
         <div class="client-name-wrap">
           <div class="client-name">${esc(b.name)}</div>
-          <div class="client-meta">Agent: ${esc(b.agent_name || 'Priya')} · ${esc(b.industry || 'General')}</div>
+          <div class="client-meta">Agent: ${esc(b.agent_name || 'Aria')} · ${esc(b.industry || 'General')}</div>
         </div>
         ${b.active ? '<div class="active-dot" title="Currently Active"></div>' : ''}
       </div>
@@ -778,7 +782,7 @@ async function quickCreateBiz() {
   const payload = {
     business: {
       name,
-      agent_name: document.getElementById('qb-agent').value.trim() || 'Priya',
+      agent_name: document.getElementById('qb-agent').value.trim() || 'Aria',
       industry: document.getElementById('qb-industry').value,
       call_type: document.getElementById('qb-calltype').value,
       languages: document.getElementById('qb-lang').value,
