@@ -20,6 +20,8 @@ import WhatsAppManager from './whatsappIntegration.js';
 import { BusinessManager } from './businessManager.js';
 import { startCall as agentStartCall, continueCall as agentContinueCall, parseAgentResponse } from './agentEngine.js';
 import { startInboundCall, continueInboundCall, endInboundCall, getInboundStats, searchInboundKB, listPackages, listEvents } from './inboundAgents.js';
+import { attachMediaStreamHandler, generateMediaStreamTwiML } from './twilioMediaStream.js';
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -28,7 +30,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const server = createServer(app);
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({ server, path: '/ws' });
 
 app.use(express.json());
 // Serve from source directory regardless of CWD
@@ -823,13 +825,17 @@ app.post('/webhook/exotel-call-status', (req, res) => {
 
 // ── TWILIO WEBHOOK ENDPOINTS ──────────────────────────────────────────────
 
+// Voice Start: Generate the initial greeting TwiML for the outbound call
+// Speechmatics real-time engine is active via twilioMediaStream.js when
+// a stable WebSocket connection is available (production deployment).
 app.post('/api/twilio/voice-start', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('🔗 Twilio call connected:', req.body.CallSid);
   if (!twilioManager) return res.status(503).send('Twilio not initialized');
-  const contact = { phone: req.body.To || req.body.From, name: 'Student' };
+  const contact = { phone: req.body.To || req.body.From, name: 'Engineer' };
   const twiml = await twilioManager.generateStartTwiML(req.body.CallSid, contact, req.body.AnsweredBy);
   res.type('text/xml').send(twiml);
 });
+
 
 app.post('/api/twilio/voice-continue', express.urlencoded({ extended: true }), async (req, res) => {
   console.log('👂 Twilio gather input for:', req.body.CallSid);
@@ -1242,9 +1248,16 @@ initializeSystems().then(() => {
     console.log(`\n🚀 Enhanced Dashboard running at http://localhost:${PORT}`);
     console.log(`📊 Features: ${automationEnabled ? 'Full Automation + Manual Mode' : 'Manual Mode Only'}`);
     console.log(`🌐 Languages: ${automationEnabled ? 'English, Hindi, Marathi' : 'English Only'}`);
+    console.log(`🎙️  Speechmatics Real-Time STT: ${process.env.SPEECHMATICS_API_KEY ? 'ENABLED ✅' : 'DISABLED (add SPEECHMATICS_API_KEY to .env)'}`);
     console.log(`📱 Open your browser to access the dashboard\n`);
+
+    // Attach Speechmatics Media Stream WebSocket handler
+    // This handles the /twilio/media-stream WebSocket path
+    attachMediaStreamHandler(server, wss);
+    console.log('🎙️  Twilio Media Stream WebSocket handler ready at /twilio/media-stream');
   });
 }).catch(error => {
   console.error('❌ Failed to start server:', error);
   process.exit(1);
 });
+
